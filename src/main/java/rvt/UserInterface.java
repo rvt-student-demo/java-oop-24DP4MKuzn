@@ -36,6 +36,21 @@ public class UserInterface {
                 int id = Integer.valueOf(scanner.nextLine());
                 list.remove(id);
             }
+
+            if (command.equals("load")) {
+                list.loadFromFile();
+                System.out.print("Tasks loaded...\n");
+            }
+
+            if (command.equals("save")) {
+                list.loadFromFile();
+                System.out.print("Save current list? (y/n)\n");
+                String y = scanner.nextLine();
+
+                if (y.equals("y")) {
+                    list.writeToFile();
+                }
+            }
         }
     }
 }
