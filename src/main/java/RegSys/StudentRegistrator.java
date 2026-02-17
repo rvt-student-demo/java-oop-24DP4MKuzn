@@ -85,25 +85,27 @@ public class StudentRegistrator {
         int w3 = 25; // email
         int w4 = 14; // personalCode
         int w5 = 12; // date
+        int w6 = 10; // time
 
         // horizontal separator line
-        String separator = String.format("+-%s-+-%s-+-%s-+-%s-+-%s-+",
-                "-".repeat(w1), "-".repeat(w2), "-".repeat(w3), "-".repeat(w4), "-".repeat(w5));
+        String separator = String.format("+-%s-+-%s-+-%s-+-%s-+-%s-+-%s-+",
+                "-".repeat(w1), "-".repeat(w2), "-".repeat(w3), "-".repeat(w4), "-".repeat(w5), "-".repeat(w6));
 
         // Header
         System.out.println(separator);
-        System.out.printf("| %-" + w1 + "s | %-" + w2 + "s | %-" + w3 + "s | %-" + w4 + "s | %-" + w5 + "s |\n",
-                "First Name", "Last Name", "Email", "ID Code", "Reg. Date");
+        System.out.printf("| %-" + w1 + "s | %-" + w2 + "s | %-" + w3 + "s | %-" + w4 + "s | %-" + w5 + "s | %-" + w6 + "s | \n",
+                "First Name", "Last Name", "Email", "ID Code", "Reg. Date", "Reg. Time");
         System.out.println(separator);
 
         // Student data rows
         for (Student s : studentList) {
-            System.out.printf("| %-" + w1 + "s | %-" + w2 + "s | %-" + w3 + "s | %-" + w4 + "s | %-" + w5 + "s |\n",
+            System.out.printf("| %-" + w1 + "s | %-" + w2 + "s | %-" + w3 + "s | %-" + w4 + "s | %-" + w5 + "s | %-" + w6 + "s | \n",
                     s.getFirstName(),
                     s.getLastName(),
                     s.getEmail(),
                     s.getPersonalCode(),
-                    s.getRegistrationDate());
+                    s.getRegistrationDate(),
+                    s.getRegistrationTime());
         }
 
         // bottom border
@@ -121,5 +123,7 @@ public class StudentRegistrator {
 
     public void removeStudent(String personalCode) {
         studentList.removeIf(s -> s.getPersonalCode().equals(personalCode));
+
+        writeToFile();
     }
 }

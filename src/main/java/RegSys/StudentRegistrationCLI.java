@@ -9,12 +9,14 @@ public class StudentRegistrationCLI {
     private StudentRegistrator registrator;
     private Scanner scanner;
 
-    public void UserInterface(StudentRegistrator registrator, Scanner scanner) {
+    public StudentRegistrationCLI(StudentRegistrator registrator, Scanner scanner) {
         this.registrator = registrator;
         this.scanner = scanner;
     }
 
     public void start() {
+        registrator.loadFromFile();
+
         while (true) {
             System.out.print("Command (enter 'help' to list all commands): ");
             String command = scanner.nextLine();
@@ -44,9 +46,11 @@ public class StudentRegistrationCLI {
                     String personalCode = scanner.nextLine();
                     LocalDate registrationDate = LocalDate.now();
                     LocalTime registrLocalTime = LocalTime.now();
-    
+
                     registrator.registerStudent(firstName, lastName, email, personalCode, registrationDate,
                             registrLocalTime);
+
+                    registrator.writeToFile();
                 } catch (Exception e) {
                     System.out.println("Registration failed: " + e.getMessage());
                 }
@@ -60,6 +64,7 @@ public class StudentRegistrationCLI {
                 System.out.println("Which student to remove? (enter personal code): ");
                 String personalCode = scanner.nextLine();
                 registrator.removeStudent(personalCode);
+                registrator.writeToFile();
             }
 
             if (command.equals("edit")) {
@@ -81,16 +86,19 @@ public class StudentRegistrationCLI {
                                 System.out.print("Enter new First Name: ");
                                 student.setFirstName(scanner.nextLine());
                                 System.out.println("Updated successfully!");
+                                registrator.writeToFile();
                                 break;
                             case "2":
                                 System.out.print("Enter new Last Name: ");
                                 student.setLastName(scanner.nextLine());
                                 System.out.println("Updated successfully!");
+                                registrator.writeToFile();
                                 break;
                             case "3":
                                 System.out.print("Enter new Email: ");
                                 student.setEmail(scanner.nextLine());
                                 System.out.println("Updated successfully!");
+                                registrator.writeToFile();
                                 break;
                             case "4":
                                 break;
