@@ -3,6 +3,7 @@ package RegSys;
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 public class StudentRegistrationCLI {
 
@@ -45,10 +46,11 @@ public class StudentRegistrationCLI {
                     System.out.println("Enter student personal code: ");
                     String personalCode = scanner.nextLine();
                     LocalDate registrationDate = LocalDate.now();
-                    LocalTime registrLocalTime = LocalTime.now();
+                    LocalTime registrationLocalTime = LocalTime.now();
+                    LocalTime truncatedRegistrationLocalTime = registrationLocalTime.truncatedTo(ChronoUnit.SECONDS);
 
                     registrator.registerStudent(firstName, lastName, email, personalCode, registrationDate,
-                            registrLocalTime);
+                            truncatedRegistrationLocalTime);
 
                     registrator.writeToFile();
                 } catch (Exception e) {

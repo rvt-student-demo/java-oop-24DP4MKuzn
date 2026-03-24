@@ -6,12 +6,13 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
+import rvt.utils.ConsoleColor;
 
 public class StudentRegistrator {
     ArrayList<Student> studentList = new ArrayList<Student>();
     private final String filePath = "data\\students.csv";
+    private final String ansiRegex = "\\u001B\\[[;\\d]*m";
 
-    // TODO: implement file loading
     public void loadFromFile() {
         File file = new File(filePath);
         if (!file.exists())
@@ -90,26 +91,33 @@ public class StudentRegistrator {
         // horizontal separator line
         String separator = String.format("+-%s-+-%s-+-%s-+-%s-+-%s-+-%s-+",
                 "-".repeat(w1), "-".repeat(w2), "-".repeat(w3), "-".repeat(w4), "-".repeat(w5), "-".repeat(w6));
+        
+        String coloredSeparator = color(separator, ConsoleColor.WHITE);
 
-        // Header
-        System.out.println(separator);
-        System.out.printf("| %-" + w1 + "s | %-" + w2 + "s | %-" + w3 + "s | %-" + w4 + "s | %-" + w5 + "s | %-" + w6 + "s | \n",
-                "First Name", "Last Name", "Email", "ID Code", "Reg. Date", "Reg. Time");
-        System.out.println(separator);
+        // header
+        System.out.println(coloredSeparator);
+        String h1 = colorAndPad("First Name", w1, ConsoleColor.CYAN);
+        String h2 = colorAndPad("Last Name", w2, ConsoleColor.CYAN);
+        String h3 = colorAndPad("Email", w3, ConsoleColor.GREEN);
+        String h4 = colorAndPad("ID Code", w4, ConsoleColor.RED);
+        String h5 = colorAndPad("Reg. Date", w5, ConsoleColor.YELLOW);
+        String h6 = colorAndPad("Reg. Time", w6, ConsoleColor.YELLOW);
+        System.out.printf("| %s | %s | %s | %s | %s | %s |%n", h1, h2, h3, h4, h5, h6);
+        System.out.println(coloredSeparator);
 
         // Student data rows
         for (Student s : studentList) {
-            System.out.printf("| %-" + w1 + "s | %-" + w2 + "s | %-" + w3 + "s | %-" + w4 + "s | %-" + w5 + "s | %-" + w6 + "s | \n",
-                    s.getFirstName(),
-                    s.getLastName(),
-                    s.getEmail(),
-                    s.getPersonalCode(),
-                    s.getRegistrationDate(),
-                    s.getRegistrationTime());
+            String c1 = padVisible(s.getFirstName(), w1);
+            String c2 = padVisible(s.getLastName(), w2);
+            String c3 = padVisible(s.getEmail(), w3);
+            String c4 = padVisible(s.getPersonalCode(), w4);
+            String c5 = padVisible(s.getRegistrationDate().toString(), w5);
+            String c6 = padVisible(s.getRegistrationTime().toString(), w6);
+            System.out.printf(" %s | %s | %s | %s | %s | %s |%n", c1, c2, c3, c4, c5, c6);
         }
 
         // bottom border
-        System.out.println(separator);
+        System.out.println(coloredSeparator);
     }
 
     public Student findStudent(String personalCode) {
@@ -125,5 +133,26 @@ public class StudentRegistrator {
         studentList.removeIf(s -> s.getPersonalCode().equals(personalCode));
 
         writeToFile();
+    }
+
+    private int visibleLength(String s) {
+        return s.replaceAll(ansiRegex, "").length();
+    }
+
+    private String padVisible(String s, int width) {
+        int visible = visibleLength(s);
+        int padding = Math.max(0, width - visible);
+        return s + " ".repeat(padding);
+    }
+
+    private String colorAndPad(String text, int width, ConsoleColor color) {
+        String colored = color.getCode() + text + ConsoleColor.RESET.getCode();
+        return padVisible(colored, width);
+    }
+
+    private String color(String text, ConsoleColor color)
+    {
+        String colored = color.getCode() + text + ConsoleColor.RESET.getCode();
+        return colored;
     }
 }
