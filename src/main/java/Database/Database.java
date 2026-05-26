@@ -35,7 +35,7 @@ public class Database {
         Statement createUserTable = null;
         try {
             createUserTable = getConnection().createStatement();
-            createUserTable.execute("CREATE TABLE todo (id INTEGER, task STRING, PRIMARY KEY(id))");
+            createUserTable.execute("CREATE TABLE IF NOT EXISTS todo (id INTEGER, task TEXT NOT NULL STRICT, PRIMARY KEY(id))");
             System.out.println("Table created successfully!");
         } catch (SQLException e) {
             e.printStackTrace();

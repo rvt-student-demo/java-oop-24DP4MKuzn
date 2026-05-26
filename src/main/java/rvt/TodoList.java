@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class TodoList {
 
     ArrayList<String> todoList = new ArrayList<>();
-    private final String filePath = "data\\orders.csv";
+    private final String filePath = "java-oop-24DP4MKuzn\\data\\todo.csv";
 
     public void loadFromFile() {
         try {
@@ -53,5 +53,9 @@ public class TodoList {
     public void remove(int number) {
         int index = number - 1;
         todoList.remove(index);
+    }
+
+    public ArrayList<String> getTodoList() {
+        return todoList;
     }
 }
